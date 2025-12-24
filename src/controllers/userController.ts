@@ -4,6 +4,7 @@ import { User } from '../entities/User.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../auth/jwtUtils.js';
 
+// User register
 export const registerUser = async (req: Request, res: Response) => {
   const userRepository = AppDataSource.getRepository(User)
   const { username, password } = req.body
@@ -30,6 +31,7 @@ export const registerUser = async (req: Request, res: Response) => {
   })
 }
 
+// User login
 export const loginUser = async (req: Request, res: Response) => {
   const userRepository = AppDataSource.getRepository(User)
   const { username, password } = req.body

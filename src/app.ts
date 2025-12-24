@@ -1,5 +1,7 @@
 import express, { Application } from "express"
 import userRoutes from './routes/userRoutes.js'
+import productRoutes from './routes/productRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 import "reflect-metadata" // Potrebno za TypeORM
 import { AppDataSource } from "./data-source.js"
 
@@ -13,6 +15,8 @@ try {
     console.log("Data Source has been initialized!")
 
     app.use('/auth', userRoutes)
+    app.use('/products', productRoutes)
+    app.use('/orders', orderRoutes)
 
     app.listen(port, () => {
         console.log(`Server je pokrenut na http://localhost:${port}`)

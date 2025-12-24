@@ -1,9 +1,10 @@
 services:
   backend:
-    build: .
-    container_name: express-app
+    build:
+      context: .
+    container_name: ts-express-app
     ports:
-      - 3000:3000
+      - "3000:3000" # Port na kojem aplikacija sluša
     depends_on:
       - database # Pokreni aplikaciju tek nakon što baza bude dostupna
     environment:
@@ -13,10 +14,6 @@ services:
       DB_PASSWORD: admin
       DB_NAME: testdb
       JWT_SECRET: supertajnakljuc # Ključ za JWT token
-    volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/dist
 
   database:
     image: postgres:14

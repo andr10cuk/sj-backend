@@ -1,0 +1,35 @@
+services:
+  backend:
+    build: .
+    container_name: express-app
+    ports:
+      - 3000:3000
+    depends_on:
+      - database # Pokreni aplikaciju tek nakon što baza bude dostupna
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_NAME: testdb
+      JWT_SECRET: supertajnakljuc # Ključ za JWT token
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/dist
+
+  database:
+    image: postgres:14
+    container_name: postg-db
+    ports:
+      - "5432:5432" # Port na kojem PostgreSQL sluša
+    environment:
+      POSTGRES_USER: admin # Korisničko ime baze
+      POSTGRES_PASSWORD: admin # Lozinka za bazu
+      POSTGRES_DB: testdb # Naziv baze
+    volumes:
+      - db_data:/var/lib/postgresql/data # Trajno skladištenje podataka baze
+
+volumes:
+  db_data:
+    

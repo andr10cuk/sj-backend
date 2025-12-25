@@ -8,6 +8,11 @@ const error: APIErrorCommon = {
 }
 
 async function checkImage(url: string): Promise<boolean> {
+    // kada dolazi kao update onda je opcion i moze da bude undefined
+    if(!url) {
+        return true
+    }
+
     if(!URL.canParse(url)) {
         return false
     }

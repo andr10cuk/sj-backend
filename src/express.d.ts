@@ -4,7 +4,7 @@ import * as express from "express"
 declare global {
   namespace Express {
     interface Request {
-      userId?: number; // Dodajemo korisnički ID kao opcionalni parametar
+      userId?: string; // Dodajemo korisnički ID kao opcionalni parametar
     }
   }
 }

@@ -8,7 +8,7 @@ import {
 } from '../controllers/productController.js'; // Uvoz metoda iz kontrolera
 import { validate } from '../middlewares/validate.js';
 import { authenticate } from '../middlewares/authMiddleware.js';
-import { productSchema } from '../schemas/productSchema.js';
+import { productSchema, updateProductSchema } from '../schemas/productSchema.js';
 import { badImage } from '../middlewares/badImageMiddleware.js';
 
 const router: Router = Router() // Kreiramo instancu rutera
@@ -22,8 +22,8 @@ router.get('/', allProducts)
 // Ruta za dohvatanje odredjenog proizvoda
 router.get('/:productId', getProduct)
 // Ruta za update odredjenog proizvoda
-router.patch('/:productId', updateProduct)
+router.patch('/:productId', authenticate, validate(updateProductSchema), badImage, updateProduct)
 // Ruta za brisanje odredjenog proizvoda
-router.delete('/:productId', deleteProduct)
+router.delete('/:productId', authenticate, deleteProduct)
 
 export default router // Izvoz rutera za upotrebu u glavnom fajlu aplikacije

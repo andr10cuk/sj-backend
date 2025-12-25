@@ -22,7 +22,7 @@ export const authenticate = (
   const token = authHeader.split(" ")[1]; // Token se nalazi iza "Bearer "
 
   try {
-    const payload = verifyToken(token) as { userId: number }; // Verifikujemo token i dobijamo korisnički ID
+    const payload = verifyToken(token) as { userId: string }; // Verifikujemo token i dobijamo korisnički ID
     req.userId = payload.userId; // Dodajemo korisnički ID u zahtev
     next(); // Nastavljamo dalje
   } catch (err) {

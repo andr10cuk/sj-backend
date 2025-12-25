@@ -7,3 +7,5 @@ export const productSchema = z.object({
     quantity: z.number().positive(),
     image_url: z.string()
 })
+
+export const updateProductSchema = productSchema.partial()

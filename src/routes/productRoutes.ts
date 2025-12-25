@@ -9,13 +9,14 @@ import {
 import { validate } from '../middlewares/validate.js';
 import { authenticate } from '../middlewares/authMiddleware.js';
 import { productSchema } from '../schemas/productSchema.js';
+import { badImage } from '../middlewares/badImageMiddleware.js';
 
 const router: Router = Router() // Kreiramo instancu rutera
 
 // Definišemo rute i povezujemo ih sa odgovarajućim metodama iz kontrolera
 
 // Ruta za kreiranje proizvoda
-router.post('/', authenticate, validate(productSchema), createProduct)
+router.post('/', authenticate, validate(productSchema), badImage, createProduct)
 // Ruta za dohvatanje svih proizvoda
 router.get('/', allProducts)
 // Ruta za dohvatanje odredjenog proizvoda

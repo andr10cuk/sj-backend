@@ -3,6 +3,8 @@ import { AppDataSource } from '../data-source.js';
 import { User } from '../entities/User.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../auth/jwtUtils.js';
+import { APIErrorCommon } from '../types/Error.js';
+import { LoginRes, UserCreationRes } from '../types/Responses.js';
 
 // User register
 export const registerUser = async (req: Request, res: Response) => {
@@ -13,7 +15,11 @@ export const registerUser = async (req: Request, res: Response) => {
     username
   })
   if(user) {
-    return res.status(401).json({ error: "DUPLICATE_USERNAME" });
+    const error: APIErrorCommon = {
+      failed: true,
+      code: "DUPLICATE_USERNAME"
+    }
+    return res.status(401).json(error);
   }
 
   // Hesiramo lozinku pre nego što je sačuvamo u bazi
@@ -25,10 +31,11 @@ export const registerUser = async (req: Request, res: Response) => {
   })
   const savedUser = await userRepository.save(newUser);
 
-  res.json({
+  const responseAPI: UserCreationRes = {
     failed: false,
     user_id: savedUser.id
-  })
+  }
+  res.status(201).json(responseAPI)
 }
 
 // User login
@@ -40,18 +47,29 @@ export const loginUser = async (req: Request, res: Response) => {
     username
   })
   if(!user) {
-    return res.status(401).json({ error: "INCORRECT_CREDENTIALS" });
+    const error: APIErrorCommon = {
+      failed: true,
+      code: "INCORRECT_CREDENTIALS"
+    }
+    return res.status(401).json(error);
   }
 
   // Upoređujemo unesenu lozinku sa hesiranom lozinkom u bazi
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    return res.status(401).json({ error: "INCORRECT_CREDENTIALS" });
+    const error: APIErrorCommon = {
+      failed: true,
+      code: "INCORRECT_CREDENTIALS"
+    }
+
+    return res.status(401).json(error);
   }
 
   const token = generateToken(user.id)
-  res.json({
+  const responseAPI: LoginRes = {
     failed: false,
     token: token
-  })
+  }
+
+  res.status(200).json(responseAPI)
 }

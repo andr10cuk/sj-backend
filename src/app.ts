@@ -4,6 +4,7 @@ import productRoutes from './routes/productRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import "reflect-metadata" // Potrebno za TypeORM
 import { AppDataSource } from "./data-source.js"
+import { APIErrorCommon } from "./types/Error.js"
 
 const app: Application = express()
 const port = 3000
@@ -17,6 +18,16 @@ try {
     app.use('/auth', userRoutes)
     app.use('/products', productRoutes)
     app.use('/orders', orderRoutes)
+
+    // globalni error handler
+    app.use((err, req, res, next) => {
+        console.log('Server Error: ', err)
+        const error: APIErrorCommon = {
+            failed: true,
+            code: "INTERNAL_ERROR"
+        }
+        res.status(500).json(error)
+    })
 
     app.listen(port, () => {
         console.log(`Server je pokrenut na http://localhost:${port}`)

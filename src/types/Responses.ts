@@ -52,7 +52,7 @@ export type NewOrderRes = {
         product_title: string;
         product_value: number;
         product_quantity: number;
-        created_at: Date;
+        created_at: string;
     }
 }
 

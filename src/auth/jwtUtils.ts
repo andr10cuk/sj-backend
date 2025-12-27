@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "supertajnakljuc";
 
 // Funkcija za generisanje JWT tokena
-export const generateToken = (userId: string) => {
-  return jwt.sign({ userId }, JWT_SECRET);
+export const generateToken = (user_id: string, username: string) => {
+  return jwt.sign({ user_id, username }, JWT_SECRET);
 };
 
 // Funkcija za verifikaciju JWT tokena

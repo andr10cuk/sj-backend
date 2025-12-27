@@ -6,11 +6,16 @@ import "reflect-metadata" // Potrebno za TypeORM
 import { AppDataSource } from "./data-source.js"
 import { APIErrorCommon } from "./types/Error.js"
 import paginate from 'express-paginate'
+import cors from 'cors'
 
 const app: Application = express()
 const port = 3000
 
 app.use(express.json())
+app.use(cors({
+    origin: 'http://localhost:5173',
+    optionsSuccessStatus: 200
+}))
 
 try {
     await AppDataSource.initialize()

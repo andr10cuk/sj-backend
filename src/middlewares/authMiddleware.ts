@@ -22,8 +22,8 @@ export const authenticate = (
   const token = authHeader.split(" ")[1]; // Token se nalazi iza "Bearer "
 
   try {
-    const payload = verifyToken(token) as { userId: string }; // Verifikujemo token i dobijamo korisnički ID
-    req.userId = payload.userId; // Dodajemo korisnički ID u zahtev
+    const payload = verifyToken(token) as { user_id: string }; // Verifikujemo token i dobijamo korisnički ID
+    req.userId = payload.user_id; // Dodajemo korisnički ID u zahtev
     next(); // Nastavljamo dalje
   } catch (err) {
     return res.status(401).json(error); // Token je nevažeći ili je istekao

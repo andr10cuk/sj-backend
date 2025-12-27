@@ -152,6 +152,8 @@ export const updateProduct = async (req: Request, res: Response) => {
         return res.status(400).json(error)
     }
     // da li mozemo da menjamo proizvod
+    console.log('product creator: ', product.creator.id)
+    console.log('request creator: ', req.userId)
     if(product.creator.id !== req.userId) {
         const error: APIErrorCommon = {
             failed: true,

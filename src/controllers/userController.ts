@@ -65,7 +65,7 @@ export const loginUser = async (req: Request, res: Response) => {
     return res.status(401).json(error);
   }
 
-  const token = generateToken(user.id)
+  const token = generateToken(user.id, user.username)
   const responseAPI: LoginRes = {
     failed: false,
     token: token

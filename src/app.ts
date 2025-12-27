@@ -5,6 +5,7 @@ import orderRoutes from './routes/orderRoutes.js'
 import "reflect-metadata" // Potrebno za TypeORM
 import { AppDataSource } from "./data-source.js"
 import { APIErrorCommon } from "./types/Error.js"
+import paginate from 'express-paginate'
 
 const app: Application = express()
 const port = 3000
@@ -18,6 +19,9 @@ try {
     app.use('/auth', userRoutes)
     app.use('/products', productRoutes)
     app.use('/orders', orderRoutes)
+
+    // express-paginate
+    app.use(paginate.middleware(10, 25))
 
     // globalni error handler
     app.use((err, req, res, next) => {

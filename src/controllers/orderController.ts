@@ -84,7 +84,15 @@ export const userOrders = async (req: Request, res: Response) => {
         return res.status(400).json(error)
     }
 
-    const userOrders: Order[] = await orderRepository.find({
+    // Uzmi `limit` i `offset` iz express-paginate middleware-a
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const page = parseInt(req.query.page as string, 10) || 1
+    // const offset = req.skip;
+    const offset = (page - 1) * limit
+
+    const [userOrders, total] = await orderRepository.findAndCount({
+        skip: offset,
+        take: limit,
         relations: {
             creator: true,
             product: true,
@@ -113,7 +121,7 @@ export const userOrders = async (req: Request, res: Response) => {
 
     const responseAPI: OrdersListingPage = {
         orders: orderDTOs,
-        total: orderDTOs.length
+        total: total
     }
     return res.status(200).json(responseAPI)
 }

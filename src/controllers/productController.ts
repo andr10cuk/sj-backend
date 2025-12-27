@@ -34,10 +34,28 @@ export const createProduct = async (req: Request, res: Response) => {
 }
 
 export const allProducts = async (req: Request, res: Response) => {
-    const products = await productRepository.find({
+    // Uzmi `limit` i `offset` iz express-paginate middleware-a
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const page = parseInt(req.query.page as string, 10) || 1
+    // const offset = req.skip;
+    const offset = (page - 1) * limit
+    const user_id = req.query.creator;
+    const older = req.query.older_first;
+
+    const [products, total] = await productRepository.findAndCount({
+        skip: offset,
+        take: limit,
         relations: {
             creator: true,
         },
+        where: {
+            creator: {
+                id: user_id as string
+            }
+        },
+        order: {
+            created_at: older === 'true' ? 'ASC' : undefined
+        }
     })
 
     const productDTOs: ProductDto[] = [];
@@ -58,7 +76,7 @@ export const allProducts = async (req: Request, res: Response) => {
     })
     const responseAPI: ProductListingPage = {
         products: productDTOs,
-        total: productDTOs.length
+        total: total
     }
 
     return res.status(200).json(responseAPI)
